@@ -1,0 +1,70 @@
+<!Doctype html>
+<html ng-app="exampleApp">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css' />
+     <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css' />
+</head>
+
+<body>
+    <!--<div class="well">
+        <h4>Top Level Controller</h4>
+        <div class="input-group">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="reverseText()">Reverse</button>
+                <button class="btn btn-default" type="button" ng-click="changeCase()">Case</button>
+            </span>
+            <input class="form-control" ng-model="dataValue" />
+        </div>
+    </div>-->
+    <div class="well" ng-controller="simpleCtrl">
+        <h4>Billing Zip Code</h4>
+        <div class="form-group">
+            <input class="form-control" ng-model="zip">
+        </div>
+        <button class="btn btn-primary" ng-click="setAddress('billingZip', zip)">
+            Save Billing
+        </button>
+    </div>
+    <div class="well" ng-controller="simpleCtrl">
+        <h4>Shipping Zip Code</h4>
+        <div class="form-group">
+            <input class="form-control" ng-model="shippingZip">
+        </div>
+        <button class="btn btn-primary" ng-click="copyAddress()">
+            Use Billing
+        </button>
+        <button class="btn btn-primary" ng-click="setAddress('shippingZip', shippingZip)">
+            Save Shipping
+        </button>
+    </div>
+    <script>
+        angular.module("exampleApp", []).controller("simpleCtrl", function ($scope,$rootScope) {
+            $scope.name = "luyuan";
+            $scope.setAddress = function (type, zip) {
+                $rootScope.$broadcast("zipCodeUpdated",{
+                    type:type,
+                    zipCode:zip
+                });// create a zipCodeUpdated event and give value in it.
+                $scope.billingZip = zip ;
+                console.log("billingzip is:" + $scope.billingZip);
+                console.log("Type: " + type + " " + zip);
+            }
+            
+            $scope.copyAddress = function () {
+                $scope.zip = $scope.billingZip;
+                console.log($scope.billingZip);
+                console.log("shoppingzip is: "+$scope.zip );
+            }
+            
+            $scope.$on("zipCodeUpdated", function(event,args){
+                $scope[args.type] = args.zipCode;
+                console.log("scope.billingzip is :");
+                console.log($scope.billingZip);
+            });             //when zipcodeupdate have value then put it in scope.billingZip which express in $scope[args.type] = args.zipCode;
+            
+        })
+    </script>
+</body>
+</html>
